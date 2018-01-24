@@ -1,0 +1,109 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #e5e2f4;
+    color: #808080;
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    background: #fff;
+    width: 100%;
+    text-align: center;
+    padding: 15px 0 15px 0;
+    margin-bottom: 10px;
+    border-top: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+}
+
+h1 {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    color: #ff6a00;
+    margin: 0;
+    font-size: 40px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.cat-list {
+	background: #fff;
+	border: 2px solid #808080;
+	border-radius: 25px;
+	padding: 2px;
+	margin: 0 30px 0 30px;
+	text-align: left;
+	width: 20%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+}
+
+.cat-option {
+	color: #808080;
+	font-size: 25px;
+	padding: 10px;
+	margin: 5px;
+	width: 100%;
+	height: 20%;
+}
+
+.selected{
+	color: #ff6a00;
+}
+
+.cat-option :hover,
+.cat-option :focus {
+    cursor: pointer;
+}
+
+
+.cat-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.cat{
+	background: #fff;
+	border: 2px solid #808080;
+	border-radius: 25px;
+}
+
+.cat-pic{
+	border: 3px solid #808080;
+	border-radius: 25px;
+	margin: 10px;
+	width: 330px;
+}
+.cat-pic:hover,
+.cat-pic:focus {
+    cursor: pointer;
+}
+
+.cat-name {
+	color: #ff6a00;
+	font-size: 30px;
+	padding: 20px;
+	margin: 5px;
+	text-align: center;
+}
+
+.click-counter {
+	padding: 20px;
+	margin: 5px;
+	text-align: center;
+}
