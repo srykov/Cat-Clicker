@@ -10,36 +10,8 @@ var model = {
 	},
 	getCat: function(catId){
 		return this.allCats.get(catId);
-	}
-}
-
-/*
- * Represents a single cat.
- */
-class Cat{
-	constructor(img, name, id){
-		this.img = img;
-		this.name = name;
-		this.id = id;
-		this.clicks = 0;
-	}
-	resetClickCounter(){
-		this.clicks = 0;
-	}
-	addClick(){
-		this.clicks++;
-	}
-
-}
-//-------------------------------------------------------------
-
-var octopus = {
-	initializeApplication: function(){
-		this.initializeModel();
-		this.initializeView();
 	},
-
-	initializeModel: function(){
+	initialize(){
 		//add Furlicity and make her the chosen one
 		let furlicity = new Cat('img/furlicity.jpg', 'Furlicity', 'furlicity');
 		model.addCat(furlicity);
@@ -60,9 +32,25 @@ var octopus = {
 		//add The Twins
 		let twins = new Cat('img/thetwins.jpg', 'The Twins', 'twins');
 		model.addCat(twins);
-	},
+	}
+}
 
-	initializeView: function(){
+/*
+ * Represents a single cat.
+ */
+class Cat{
+	constructor(img, name, id){
+		this.img = img;
+		this.name = name;
+		this.id = id;
+		this.clicks = 0;
+	}
+}
+//-------------------------------------------------------------
+
+var octopus = {
+	initializeApplication: function(){
+		model.initialize();
 		catListView.initializeCatSelectionList(model.selectedCatId);
 		this.selectCat(model.selectedCatId);
 	},
@@ -89,12 +77,11 @@ var catView = {
 		const catImage = document.querySelector('.cat-pic');
 		catImage.setAttribute('src', selectedCat.img);
 		catImage.setAttribute('data-key', selectedCat.id);
+		catImage.addEventListener('click', this.handleCatImageClick);
 
 		const clicks = document.querySelector('.clicks');
 		clicks.classList.add('clicks');
 		clicks.innerText = selectedCat.clicks;
-
-		catImage.addEventListener('click', this.handleCatImageClick);
 	},
 
 	updateClickCount: function(cat){
