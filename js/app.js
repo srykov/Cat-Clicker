@@ -63,25 +63,59 @@ var octopus = {
 	},
 
 	initializeView: function(){
-		view.initializeCatSelectionList(model.selectedCatId);
+		catListView.initializeCatSelectionList(model.selectedCatId);
 		this.selectCat(model.selectedCatId);
 	},
 
 	selectCat: function(selectedCatId){
 		model.selectedCatId = selectedCatId;
 		let selectedCat = model.getCat(selectedCatId);
-		view.loadCat(selectedCat);
+		catView.loadCat(selectedCat);
 	},
 
 	clickCat: function(clickedCatId){
 		let clickedCat = model.getCat(clickedCatId);
 		clickedCat.clicks++;
-		view.updateClickCount(clickedCat);
+		catView.updateClickCount(clickedCat);
 	}
 }
 
 //---------------------------------------------------------------
-var view = {
+var catView = {
+	loadCat: function(selectedCat){
+		const catName = document.querySelector('.cat-name');
+		catName.innerText = selectedCat.name;
+
+		const catImage = document.querySelector('.cat-pic');
+		catImage.setAttribute('src', selectedCat.img);
+		catImage.setAttribute('data-key', selectedCat.id);
+
+		const clicks = document.querySelector('.clicks');
+		clicks.classList.add('clicks');
+		clicks.innerText = selectedCat.clicks;
+
+		catImage.addEventListener('click', this.handleCatImageClick);
+	},
+
+	updateClickCount: function(cat){
+		//update page with new click count
+		const counter = document.querySelector('.clicks');
+		counter.innerText = cat.clicks;
+	},
+
+	handleCatImageClick: function(event){
+
+		//only handle click events on cat-pics
+		if(event.target.nodeName.toLowerCase() == 'img'){
+			//figure out which cat & register click
+			const catId = event.target.getAttribute('data-key');
+			octopus.clickCat(catId);
+		}
+	}
+}
+
+
+var catListView = {
 	initializeCatSelectionList: function(selectedCatId){
 		const container = document.querySelector('.cat-list');
 
@@ -108,37 +142,6 @@ var view = {
 		selectedOption.classList.add('selected');
 		const selectedCatId = selectedOption.id;
 		octopus.selectCat(selectedCatId);
-	},
-
-	handleCatImageClick: function(event){
-
-		//only handle click events on cat-pics
-		if(event.target.nodeName.toLowerCase() == 'img'){
-			//figure out which cat & register click
-			const catId = event.target.getAttribute('data-key');
-			octopus.clickCat(catId);
-		}
-	},
-
-	updateClickCount: function(cat){
-		//update page with new click count
-		const counter = document.querySelector('.clicks');
-		counter.innerText = cat.clicks;
-	},
-
-	loadCat: function(selectedCat){
-		const catName = document.querySelector('.cat-name');
-		catName.innerText = selectedCat.name;
-
-		const catImage = document.querySelector('.cat-pic');
-		catImage.setAttribute('src', selectedCat.img);
-		catImage.setAttribute('data-key', selectedCat.id);
-
-		const clicks = document.querySelector('.clicks');
-		clicks.classList.add('clicks');
-		clicks.innerText = selectedCat.clicks;
-
-		catImage.addEventListener('click', this.handleCatImageClick);
 	}
 }
 
