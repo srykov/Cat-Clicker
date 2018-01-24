@@ -60,6 +60,11 @@ h1 {
 	height: 20%;
 }
 
+.cat-option:hover,
+.cat-option:focus {
+    cursor: pointer;
+}
+
 .selected{
 	color: #ff6a00;
 }
@@ -94,11 +99,6 @@ h1 {
 	padding: 20px;
 	margin: 5px;
 	text-align: center;
-}
-
-.cat-name :hover,
-.cat-name :focus {
-    cursor: pointer;
 }
 
 .click-counter {
