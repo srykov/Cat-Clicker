@@ -64,12 +64,6 @@ h1 {
 	color: #ff6a00;
 }
 
-.cat-option :hover,
-.cat-option :focus {
-    cursor: pointer;
-}
-
-
 .cat-container {
     display: flex;
     flex-direction: column;
@@ -100,6 +94,11 @@ h1 {
 	padding: 20px;
 	margin: 5px;
 	text-align: center;
+}
+
+.cat-name :hover,
+.cat-name :focus {
+    cursor: pointer;
 }
 
 .click-counter {

@@ -1,69 +1,6 @@
 document.addEventListener('DOMContentLoaded', initialize);
 
-let catClicker;
-
-function initialize(){
-
-	initializeCats();
-	initializeOptions();
-
-}
-
-function initializeOptions(){
-	const container = document.querySelector('.cat-list');
-
-	for([catName, cat] of catClicker.allCats){
-		const catOption = document.createElement('div');
-		catOption.classList.add('cat-option');
-		catOption.setAttribute('id', catName.toLowerCase());
-		catOption.textContent = cat.name;
-
-		if(cat.selected){
-			catOption.classList.add('selected');
-			cat.makeChosenOne();
-		}
-
-		catOption.addEventListener('click', handleCatOptionClick);
-		container.appendChild(catOption);
-	}
-
-}
-
-function initializeCats(){
-	 catClicker = new CatClicker();
-
-	//add Furlicity
-	let furlicity = new Cat('img/furlicity.jpg', 'Furlicity', 'furlicity', true);
-	catClicker.addCat(furlicity);
-
-	//add Mackerel
-	let mackerel = new Cat('img/mackerel.jpg', 'Mackerel', 'mackerel');
-	catClicker.addCat(mackerel);
-
-	//add Snowball
-	let snowball = new Cat('img/snowball.jpg', 'Snowball', 'snowball');
-	catClicker.addCat(snowball);
-
-	//add Buddy
-	let buddy = new Cat('img/buddy.jpg', 'Buddy', 'buddy');
-	catClicker.addCat(buddy);
-
-	//add The Twins
-	let twins = new Cat('img/thetwins.jpg', 'The Twins', 'twins');
-	catClicker.addCat(twins);
-}
-
-function initializeList(){
-
-	const catList = document.querySelector('.cat-list');
-
-	for([catName, cat] of catClicker.allCats){
-		const catContainerDiv = cat.getHtml();
-		container.appendChild(catContainerDiv);
-	}
-}
-
-class CatClicker{
+class Model {
 	constructor(){
 		this.allCats = new Map();
 	}
@@ -106,6 +43,69 @@ class Cat{
 	}
 }
 
+let model;
+
+function initialize(){
+
+	initializeCats();
+	initializeOptions();
+
+}
+
+function initializeOptions(){
+	const container = document.querySelector('.cat-list');
+
+	for([catName, cat] of model.allCats){
+		const catOption = document.createElement('div');
+		catOption.classList.add('cat-option');
+		catOption.setAttribute('id', catName.toLowerCase());
+		catOption.textContent = cat.name;
+
+		if(cat.selected){
+			catOption.classList.add('selected');
+			cat.makeChosenOne();
+		}
+
+		catOption.addEventListener('click', handleCatOptionClick);
+		container.appendChild(catOption);
+	}
+
+}
+
+function initializeCats(){
+	 model = new Model();
+
+	//add Furlicity
+	let furlicity = new Cat('img/furlicity.jpg', 'Furlicity', 'furlicity', true);
+	model.addCat(furlicity);
+
+	//add Mackerel
+	let mackerel = new Cat('img/mackerel.jpg', 'Mackerel', 'mackerel');
+	model.addCat(mackerel);
+
+	//add Snowball
+	let snowball = new Cat('img/snowball.jpg', 'Snowball', 'snowball');
+	model.addCat(snowball);
+
+	//add Buddy
+	let buddy = new Cat('img/buddy.jpg', 'Buddy', 'buddy');
+	model.addCat(buddy);
+
+	//add The Twins
+	let twins = new Cat('img/thetwins.jpg', 'The Twins', 'twins');
+	model.addCat(twins);
+}
+
+function initializeList(){
+
+	const catList = document.querySelector('.cat-list');
+
+	for([catName, cat] of model.allCats){
+		const catContainerDiv = cat.getHtml();
+		container.appendChild(catContainerDiv);
+	}
+}
+
 /*
  * Handle click event on a cat pic.
  *
@@ -117,7 +117,7 @@ function handleCatImageClick(event){
 		const catContainer = event.target.closest('.cat-container');
 		const catId = event.target.getAttribute('data-key');
 
-		const cat = catClicker.getCat(catId);
+		const cat = model.getCat(catId);
 		cat.addClick();
 
 		const counter = catContainer.querySelector('.clicks');
@@ -140,7 +140,7 @@ function handleCatOptionClick(event){
 	selectedOption.classList.add('selected');
 
 	const catId = selectedOption.id;
-	const cat = catClicker.getCat(catId);
+	const cat = model.getCat(catId);
 
 	cat.makeChosenOne();
 }
