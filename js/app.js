@@ -53,6 +53,9 @@ class Cat{
 		this.name = name;
 		this.clicks = clicks;
 	}
+	addClick(){
+		this.clicks++;
+	}
 }
 //-------------------------------------------------------------
 
@@ -60,7 +63,8 @@ var octopus = {
 	initializeApplication: function(){
 		model.initialize();
 		catListView.renderCatSelectionList(model.selectedCatId);
-		this.selectCat(model.selectedCatId);
+		catView.initializeCatView();
+		octopus.selectCat(model.selectedCatId);
 		const selectedCat = model.getCat(model.selectedCatId);
 		adminView.initializeAdminView(selectedCat);
 	},
@@ -76,8 +80,9 @@ var octopus = {
 	},
 
 	clickCat: function(clickedCatId){
+		debugger;
 		const clickedCat = model.getCat(clickedCatId);
-		clickedCat.clicks++;
+		clickedCat.addClick();
 		catView.updateClickCount(clickedCat);
 	},
 
@@ -91,19 +96,22 @@ var octopus = {
 
 //---------------------------------------------------------------
 var catView = {
-	renderCat: function(selectedCat){
+	initializeCatView: function(selectedCat){
 		this.catNameElement = document.querySelector('.cat-name');
-		this.catNameElement.innerText = selectedCat.name;
+		this.clicksElement = document.querySelector('.clicks');
 
 		this.catImage = document.querySelector('.cat-pic');
-		this.catImage.setAttribute('src', selectedCat.img);
-		this.catImage.setAttribute('data-key', selectedCat.id);
 		this.catImage.addEventListener('click', function(event){
 			catView.handleCatImageClick(event);
 		});
+	},
 
-		this.clicksElement = document.querySelector('.clicks');
-		this.clicksElement.classList.add('clicks');
+	renderCat(selectedCat){
+		this.catNameElement.innerText = selectedCat.name;
+
+		this.catImage.setAttribute('src', selectedCat.img);
+		this.catImage.setAttribute('data-key', selectedCat.id);
+
 		this.clicksElement.innerText = selectedCat.clicks;
 	},
 
