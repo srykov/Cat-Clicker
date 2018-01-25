@@ -36,7 +36,7 @@ var model = {
 		let twins = new Cat('img/thetwins.jpg', 'The Twins', '5');
 		model.addCat(twins);
 	}
-}
+};
 
 /*
  * Represents a single cat.
@@ -57,6 +57,7 @@ class Cat{
 		this.clicks++;
 	}
 }
+
 //-------------------------------------------------------------
 
 var octopus = {
@@ -92,7 +93,7 @@ var octopus = {
 		catView.renderCat(selectedCat);
 		catListView.renderCatSelectionList(id);
 	}
-}
+};
 
 //---------------------------------------------------------------
 var catView = {
@@ -128,7 +129,7 @@ var catView = {
 			octopus.clickCat(catId);
 		}
 	}
-}
+};
 
 
 var catListView = {
@@ -154,6 +155,7 @@ var catListView = {
 	},
 
 	handleCatOptionClick: function(event){
+		debugger;
 		const selectedOption = event.target.closest('.cat-option');
 		const allOptions = document.querySelectorAll('.cat-option');
 		for(option of allOptions){
@@ -163,7 +165,7 @@ var catListView = {
 		const selectedCatId = selectedOption.id;
 		octopus.selectCat(selectedCatId);
 	}
-}
+};
 
 var adminView = {
 	initializeAdminView: function(selectedCat){
@@ -209,6 +211,6 @@ var adminView = {
 		this.adminForm.style.display = 'none';
 		this.adminBtn.style.display = 'block';
 	}
-}
+};
 
 document.addEventListener('DOMContentLoaded', octopus.initializeApplication());
