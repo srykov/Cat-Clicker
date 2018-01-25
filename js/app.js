@@ -11,26 +11,29 @@ var model = {
 	getCat: function(catId){
 		return this.allCats.get(catId);
 	},
+	getSelectedCat: function(){
+		return this.allCats.get(this.selectedCatId);
+	},
 	initialize(){
 		//add Furlicity and make her the chosen one
-		let furlicity = new Cat('img/furlicity.jpg', 'Furlicity', 'furlicity');
+		let furlicity = new Cat('img/furlicity.jpg', 'Furlicity', '1');
 		model.addCat(furlicity);
 		model.selectedCatId = furlicity.id;
 
 		//add Mackerel
-		let mackerel = new Cat('img/mackerel.jpg', 'Mackerel', 'mackerel');
+		let mackerel = new Cat('img/mackerel.jpg', 'Mackerel', '2');
 		model.addCat(mackerel);
 
 		//add Snowball
-		let snowball = new Cat('img/snowball.jpg', 'Snowball', 'snowball');
+		let snowball = new Cat('img/snowball.jpg', 'Snowball', '3');
 		model.addCat(snowball);
 
 		//add Buddy
-		let buddy = new Cat('img/buddy.jpg', 'Buddy', 'buddy');
+		let buddy = new Cat('img/buddy.jpg', 'Buddy', '4');
 		model.addCat(buddy);
 
 		//add The Twins
-		let twins = new Cat('img/thetwins.jpg', 'The Twins', 'twins');
+		let twins = new Cat('img/thetwins.jpg', 'The Twins', '5');
 		model.addCat(twins);
 	}
 }
@@ -45,49 +48,67 @@ class Cat{
 		this.id = id;
 		this.clicks = 0;
 	}
+	update(img, name, clicks){
+		this.img = img;
+		this.name = name;
+		this.clicks = clicks;
+	}
 }
 //-------------------------------------------------------------
 
 var octopus = {
 	initializeApplication: function(){
 		model.initialize();
-		catListView.initializeCatSelectionList(model.selectedCatId);
+		catListView.renderCatSelectionList(model.selectedCatId);
 		this.selectCat(model.selectedCatId);
+		const selectedCat = model.getCat(model.selectedCatId);
+		adminView.initializeAdminView(selectedCat);
+	},
+
+	getSelectedCat(){
+		return model.getSelectedCat();
 	},
 
 	selectCat: function(selectedCatId){
 		model.selectedCatId = selectedCatId;
-		let selectedCat = model.getCat(selectedCatId);
-		catView.loadCat(selectedCat);
+		const selectedCat = model.getCat(selectedCatId);
+		catView.renderCat(selectedCat);
 	},
 
 	clickCat: function(clickedCatId){
-		let clickedCat = model.getCat(clickedCatId);
+		const clickedCat = model.getCat(clickedCatId);
 		clickedCat.clicks++;
 		catView.updateClickCount(clickedCat);
+	},
+
+	updateCat: function(id, img, name, clicks){
+		const selectedCat = model.getCat(id);
+		selectedCat.update(img, name, clicks);
+		catView.renderCat(selectedCat);
+		catListView.renderCatSelectionList(id);
 	}
 }
 
 //---------------------------------------------------------------
 var catView = {
-	loadCat: function(selectedCat){
-		const catName = document.querySelector('.cat-name');
-		catName.innerText = selectedCat.name;
+	renderCat: function(selectedCat){
+		this.catNameElement = document.querySelector('.cat-name');
+		this.catNameElement.innerText = selectedCat.name;
 
-		const catImage = document.querySelector('.cat-pic');
-		catImage.setAttribute('src', selectedCat.img);
-		catImage.setAttribute('data-key', selectedCat.id);
-		catImage.addEventListener('click', this.handleCatImageClick);
+		this.catImage = document.querySelector('.cat-pic');
+		this.catImage.setAttribute('src', selectedCat.img);
+		this.catImage.setAttribute('data-key', selectedCat.id);
+		this.catImage.addEventListener('click', function(event){
+			catView.handleCatImageClick(event);
+		});
 
-		const clicks = document.querySelector('.clicks');
-		clicks.classList.add('clicks');
-		clicks.innerText = selectedCat.clicks;
+		this.clicksElement = document.querySelector('.clicks');
+		this.clicksElement.classList.add('clicks');
+		this.clicksElement.innerText = selectedCat.clicks;
 	},
 
 	updateClickCount: function(cat){
-		//update page with new click count
-		const counter = document.querySelector('.clicks');
-		counter.innerText = cat.clicks;
+		this.clicksElement.innerText = cat.clicks;
 	},
 
 	handleCatImageClick: function(event){
@@ -103,20 +124,24 @@ var catView = {
 
 
 var catListView = {
-	initializeCatSelectionList: function(selectedCatId){
-		const container = document.querySelector('.cat-list');
+	renderCatSelectionList: function(selectedCatId){
 
-		for([catName, cat] of model.allCats){
+		this.catListElem = document.querySelector('.cat-list');
+		this.catListElem.innerHTML = '';
+
+		for([id, cat] of model.allCats){
 			const catOption = document.createElement('div');
 			catOption.classList.add('cat-option');
-			catOption.setAttribute('id', catName.toLowerCase());
+			catOption.setAttribute('id', id);
 			catOption.textContent = cat.name;
 
 			if(cat.id == selectedCatId){
 				catOption.classList.add('selected');
 			}
-			catOption.addEventListener('click', this.handleCatOptionClick);
-			container.appendChild(catOption);
+			catOption.addEventListener('click', function(event){
+				catListView.handleCatOptionClick(event);
+			});
+			this.catListElem.appendChild(catOption);
 		}
 	},
 
@@ -129,6 +154,52 @@ var catListView = {
 		selectedOption.classList.add('selected');
 		const selectedCatId = selectedOption.id;
 		octopus.selectCat(selectedCatId);
+	}
+}
+
+var adminView = {
+	initializeAdminView: function(selectedCat){
+		//get admin view HTML elements
+		this.adminForm = document.querySelector('.admin-form');
+		this.adminBtn = document.getElementById('admin-btn');
+		this.adminSaveBtn = document.getElementById('admin-save-btn');
+		this.adminIdInput = document.getElementById('admin-cat-id');
+		this.adminNameInput = document.getElementById('admin-cat-name');
+		this.adminImgInput = document.getElementById('admin-cat-img');
+		this.adminClicksInput = document.getElementById('admin-cat-clicks');
+
+		//add event listeners
+		this.adminBtn.addEventListener('click', function(){
+			adminView.renderAdminForm();
+		});
+
+		this.adminSaveBtn.addEventListener('click', function(){
+			adminView.submitAdminForm();
+		});
+	},
+
+	renderAdminForm: function(){
+		const selectedCat = octopus.getSelectedCat();
+
+		//fill in form with selected cat's info
+		this.adminImgInput.value=selectedCat.img;
+		this.adminNameInput.value=selectedCat.name;
+		this.adminIdInput.value=selectedCat.id;
+		this.adminClicksInput.value=selectedCat.clicks;
+
+		this.adminForm.style.display = 'block';
+		this.adminBtn.style.display = 'none';
+	},
+
+	submitAdminForm: function(){
+		const id = this.adminIdInput.value;
+		const img = this.adminImgInput.value;
+		const name = this.adminNameInput.value;
+		const clicks = this.adminClicksInput.value;
+		octopus.updateCat(id, img, name, clicks);
+
+		this.adminForm.style.display = 'none';
+		this.adminBtn.style.display = 'block';
 	}
 }
 
