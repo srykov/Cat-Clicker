@@ -1,5 +1,5 @@
 # Cat Clicker
-This is an application that I developed as part of my Udacity [Front-End Web Developer Nanodegree Program](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001). The lesson required me to iteratively build my own version of [Kitty Clicker] (www.kitty-clicker.com/). The requirements for the application changed iteratively, and the finished product of each set of requirements is captured here in a different branch. 
+This is an application that I developed as part of my Udacity [Front-End Web Developer Nanodegree Program](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001). The lesson required me to iteratively build my own version of [Kitty Clicker](www.kitty-clicker.com/). The requirements for the application changed iteratively, and the finished product of each set of requirements is captured here in a different branch. 
 
 ![Cat Clicker](https://github.com/srykov/Cat-Clicker/blob/premium-pro/img/logo.jpg)
 
